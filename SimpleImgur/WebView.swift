@@ -22,6 +22,10 @@ struct WebView: UIViewRepresentable {
         let contentController = WKUserContentController()
         
         // load JS from files
+        
+        // We will load two scripts that the webview will run at different times during initial rendering.
+        // Could be done with a single .atDocumentStart injection creating an event to fire later, but
+        // having two files is nicer.
         var source = "console.log('failed to load script.js');"
         do {
             source = try String(contentsOf: Bundle.main.url(forResource: "atDocumentStartScript", withExtension: "js")!)
@@ -32,6 +36,8 @@ struct WebView: UIViewRepresentable {
                                   forMainFrameOnly: true)
         
         contentController.addUserScript(script)
+        
+        
         
         // load JS from files
         source = "console.log('failed to load script.js');"
@@ -48,14 +54,11 @@ struct WebView: UIViewRepresentable {
         // Attach the content controller to the configuration
         webConfiguration.userContentController = contentController
         
-        //
+        // make the webView
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         
         // Assign the NavigationDelegate
         webView.navigationDelegate = navDel
-        
-        
-        webView.allowsBackForwardNavigationGestures = true
         
         // Allow Safari developer tools to connect to the app for debugging
         webView.isInspectable = true
@@ -70,10 +73,6 @@ struct WebView: UIViewRepresentable {
         let request = URLRequest(url: URL(string: "https://imgur.com")!)
         
         webView.load(request)
-        
-        
-        
-        webView.allowsBackForwardNavigationGestures = true
     }
     
     
