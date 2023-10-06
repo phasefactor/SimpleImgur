@@ -12,8 +12,6 @@
 		CE05AF3D2ACCFA02005D16BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE05AF3C2ACCFA02005D16BF /* Assets.xcassets */; };
 		CE05AF412ACCFA02005D16BF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE05AF402ACCFA02005D16BF /* Preview Assets.xcassets */; };
 		CE05AF482ACCFA1C005D16BF /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE05AF472ACCFA1C005D16BF /* WebView.swift */; };
-		CE05AF4A2ACDEE07005D16BF /* atDocumentEndScript.js in Resources */ = {isa = PBXBuildFile; fileRef = CE05AF492ACDEE07005D16BF /* atDocumentEndScript.js */; };
-		CE05AF4C2ACE0CA5005D16BF /* atDocumentStartScript.js in Resources */ = {isa = PBXBuildFile; fileRef = CE05AF4B2ACE0CA5005D16BF /* atDocumentStartScript.js */; };
 		CEE776C62ACE0F0000B72846 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CEE776C52ACE0F0000B72846 /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -25,8 +23,6 @@
 		CE05AF3E2ACCFA02005D16BF /* SimpleImgur.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleImgur.entitlements; sourceTree = "<group>"; };
 		CE05AF402ACCFA02005D16BF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CE05AF472ACCFA1C005D16BF /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
-		CE05AF492ACDEE07005D16BF /* atDocumentEndScript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = atDocumentEndScript.js; sourceTree = "<group>"; };
-		CE05AF4B2ACE0CA5005D16BF /* atDocumentStartScript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = atDocumentStartScript.js; sourceTree = "<group>"; };
 		CEE776C52ACE0F0000B72846 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,8 +60,6 @@
 				CE05AF382ACCFA01005D16BF /* SimpleImgurApp.swift */,
 				CE05AF3A2ACCFA01005D16BF /* ContentView.swift */,
 				CE05AF472ACCFA1C005D16BF /* WebView.swift */,
-				CE05AF492ACDEE07005D16BF /* atDocumentEndScript.js */,
-				CE05AF4B2ACE0CA5005D16BF /* atDocumentStartScript.js */,
 				CE05AF3C2ACCFA02005D16BF /* Assets.xcassets */,
 				CE05AF3E2ACCFA02005D16BF /* SimpleImgur.entitlements */,
 				CE05AF3F2ACCFA02005D16BF /* Preview Content */,
@@ -140,9 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE05AF412ACCFA02005D16BF /* Preview Assets.xcassets in Resources */,
-				CE05AF4A2ACDEE07005D16BF /* atDocumentEndScript.js in Resources */,
 				CEE776C62ACE0F0000B72846 /* README.md in Resources */,
-				CE05AF4C2ACE0CA5005D16BF /* atDocumentStartScript.js in Resources */,
 				CE05AF3D2ACCFA02005D16BF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

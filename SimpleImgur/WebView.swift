@@ -11,20 +11,7 @@ import WebKit
 struct WebView: UIViewRepresentable {
     @State var navDel  = WebViewNavigationDelegate()
     
-    
-  //  var webView: WKWebView
-    
-    init() {
-        let _ = print("INIT")
-        
-        
-    }
-    
-    
     func makeUIView(context: Context) -> WKWebView {
-        
-        let _ = print("running makeUIView")
-        
         let config  = WKWebViewConfiguration()
         let control = WKUserContentController()
 
@@ -35,154 +22,24 @@ struct WebView: UIViewRepresentable {
         
         // add block rules as described:
         // https://developer.apple.com/documentation/safariservices/creating_a_content_blocker
-        let jsonString = """
-            [
-                {
-                    "trigger": {
-                        "url-filter": ".*doubleclick\\\\.net.*"
-                    },
-                    "action":  {
-                        "type": "block"
-                    }
-                },
-
-                {
-                    "trigger": {
-                        "url-filter": ".*sentry-cdn\\\\.com.*"
-                    },
-                    "action":  {
-                        "type": "block"
-                    }
-                },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*smartadserver\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*assemblyexchange\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*amazon-adsystem\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*ccgateway\\\\.net.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*run\\\\.app.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*facebook\\\\.(net)?(com)?.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*scorecardresearch\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*google-analytics\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*sascdn\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*media-lab\\\\.ai.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*adsafeprotected\\\\.com.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*ad-delivery\\\\.net.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                 {
-                     "trigger": {
-                         "url-filter": ".*cloudfront\\\\.net.*"
-                     },
-                     "action":  {
-                         "type": "block"
-                     }
-                 },
-
-                {
-                    "trigger": {
-                        "url-filter": ".*"
-                    },
-                    "action": {
-                        "type": "css-display-none",
-                        "selector": "div.AdTop, div.BannerAd-cont, div.Ad-adhesive, a.get-app-block"
-                    }
-                }
-            ]
-        """
+        
+        
+        // list of domains that imgur loads nonsense from
+        let urlList = ["doubleclick.net", "sentry-cdn.com", "smartadserver.com", "assemblyexchange.com", "amazon-adsystem.com", "ccgateway.net", "run.app", "facebook.(net)?(com)?", "scorecardresearch.com", "google-analytics.com", "sascdn.com", "media-lab.ai", "adsafeprotected.com", "ad-delivery.net", "cloudfront.net", "stretchsquirrel.com", "merequartz.com", "btloader.com"]
+        
+        // build our JSON block list from scratch
+        var jsonString = "["
+        
+        for url in urlList {
+            // running split twice is gross, but the list of urls is very short
+            jsonString += "{\"trigger\":{\"url-filter\":\".*\(url.split(separator:".")[0])\\\\.\(url.split(separator:".")[1]).*\"},\"action\":{\"type\":\"block\"}},"
+        }
+        
+        // css rule to hide any empty ad spots and the Get App button
+        jsonString += "{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"css-display-none\",\"selector\":\"div.AdTop,div.BannerAd-cont,div.Ad-adhesive,a.get-app-block\"}}"
+        
+        jsonString += "]"
+        
         
         // compile the rules list
         WKContentRuleListStore.default().compileContentRuleList(forIdentifier: "ContentBlockingRules", encodedContentRuleList: jsonString) { (contentRuleList, error) in
@@ -192,7 +49,7 @@ struct WebView: UIViewRepresentable {
                 
                 return
             }
-            let _ = print("rule")
+            
             // attach compiled rules to config
             config.userContentController.add(contentRuleList!)
         }
@@ -215,8 +72,6 @@ struct WebView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {
         let request = URLRequest(url: URL(string: "https://imgur.io")!)
         
-        let _ = print("running updateUIView")
-        
         webView.load(request)
     }
     
@@ -229,8 +84,6 @@ struct WebView: UIViewRepresentable {
             
             if let url = navigationAction.request.url {
                 if let host = url.host {
-                    let _ = print("navigating to ", host)
-                    
                     if host.contains("imgur.com") || host.contains("imgur.io") {
                             decisionHandler(.allow)
                             return
