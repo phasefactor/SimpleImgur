@@ -20,9 +20,26 @@ struct WebView: UIViewRepresentable {
         // Needed for the auto-play of video previews to not instantly enter full-screen.
         config.allowsInlineMediaPlayback = true
         
+        
+        // inject a short bit of JS to fix the logo.  seems that they are purposefully
+        // blocking the click from actually causing the link to navigate...
+        // using timeout because the imgur ui is built dynamically on page load
+        let source = """
+        setTimeout(() => {
+            let el = document.querySelector("a.Navbar-logo");
+            el.parentNode.replaceChild(el.cloneNode(true), el);
+        }, 5000);
+        """
+        
+        let script = WKUserScript(source: source,
+                                  injectionTime: .atDocumentEnd,
+                                  forMainFrameOnly: true)
+        
+        control.addUserScript(script)
+        
+        
         // add block rules as described:
         // https://developer.apple.com/documentation/safariservices/creating_a_content_blocker
-        
         
         // list of domains that imgur loads nonsense from
         let urlList = ["doubleclick.net", "sentry-cdn.com", "smartadserver.com", "assemblyexchange.com", "amazon-adsystem.com", "ccgateway.net", "run.app", "facebook.(net)?(com)?", "scorecardresearch.com", "google-analytics.com", "sascdn.com", "media-lab.ai", "adsafeprotected.com", "ad-delivery.net", "cloudfront.net", "stretchsquirrel.com", "merequartz.com", "btloader.com"]
