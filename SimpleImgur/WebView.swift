@@ -9,7 +9,7 @@ import SwiftUI
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    @State var navDel  = WebViewNavigationDelegate()
+    let navDel  = WebViewNavigationDelegate()
     
     func makeUIView(context: Context) -> WKWebView {
         let config  = WKWebViewConfiguration()
@@ -17,7 +17,7 @@ struct WebView: UIViewRepresentable {
 
         config.userContentController = control
         
-        // Needed for the auto-play of video previews to not instantly enter full-screen.
+        // Needed for videos to not instantly enter full-screen.
         config.allowsInlineMediaPlayback = true
         
         
