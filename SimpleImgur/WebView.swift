@@ -80,6 +80,9 @@ struct WebView: UIViewRepresentable {
         // Allow Safari developer tools to connect to the app for debugging
         webView.isInspectable = true
         
+        // disable scrolling to top when the top of the screen (above the safe area) is touched
+        webView.scrollView.scrollsToTop = false
+        
         return webView
     }
     
