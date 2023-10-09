@@ -42,14 +42,14 @@ struct WebView: UIViewRepresentable {
         // https://developer.apple.com/documentation/safariservices/creating_a_content_blocker
         
         // list of domains that imgur loads nonsense from
-        let urlList = ["doubleclick.net", "sentry-cdn.com", "smartadserver.com", "assemblyexchange.com", "amazon-adsystem.com", "ccgateway.net", "run.app", "facebook.(net)?(com)?", "scorecardresearch.com", "google-analytics.com", "sascdn.com", "media-lab.ai", "adsafeprotected.com", "ad-delivery.net", "cloudfront.net", "stretchsquirrel.com", "merequartz.com", "btloader.com"]
+        let urlList = ["doubleclick.net", "sentry-cdn.com", "smartadserver.com", "assemblyexchange.com", "amazon-adsystem.com", "ccgateway.net", "run.app", "facebook.(net)?(com)?", "scorecardresearch.com", "google-analytics.com", "sascdn.com", "media-lab.ai", "adsafeprotected.com", "ad-delivery.net", "cloudfront.net", "stretchsquirrel.com", "merequartz.com", "btloader.com", "t.imgur.com"]
         
         // build our JSON block list from scratch
         var jsonString = "["
         
         for url in urlList {
             // running split twice is gross, but the list of urls is very short
-            jsonString += "{\"trigger\":{\"url-filter\":\".*\(url.split(separator:".")[0])\\\\.\(url.split(separator:".")[1]).*\"},\"action\":{\"type\":\"block\"}},"
+            jsonString += "{\"trigger\":{\"url-filter\":\".*\(url.replacingOccurrences(of: ".", with: "\\\\.")).*\"},\"action\":{\"type\":\"block\"}},"
         }
         
         // css rule to hide any empty ad spots and the Get App button
