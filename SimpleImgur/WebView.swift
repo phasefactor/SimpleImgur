@@ -48,12 +48,11 @@ struct WebView: UIViewRepresentable {
         var jsonString = "["
         
         for url in urlList {
-            // running split twice is gross, but the list of urls is very short
             jsonString += "{\"trigger\":{\"url-filter\":\".*\(url.replacingOccurrences(of: ".", with: "\\\\.")).*\"},\"action\":{\"type\":\"block\"}},"
         }
         
         // css rule to hide any empty ad spots and the Get App button
-        jsonString += "{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"css-display-none\",\"selector\":\"div.AdTop,div.BannerAd-cont,div.Ad-adhesive,a.get-app-block\"}}"
+        jsonString += "{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"css-display-none\",\"selector\":\"div.AdTop,div.BannerAd-cont,div.Ad-adhesive,a.get-app-block,a.EmeraldButton,div.AdHomeContainer,div:has(>div>div>div.AdHomeContainer)\"}}"
         
         jsonString += "]"
         
