@@ -29,6 +29,19 @@ struct WebView: UIViewRepresentable {
             let el = document.querySelector("a.Navbar-logo");
             el.parentNode.replaceChild(el.cloneNode(true), el);
         }, 5000);
+        
+        // load high res version of images that might be saved/copied
+        document.body.addEventListener('touchstart', (event) => {
+            if (event.target.tagName == "IMG" &&
+                event.target.src.includes(".webp")) {
+                
+                let url = new URLSearchParams(event.target.src);
+                url.set("fidelity", "high");
+                url.set("maxwidth", "9999");
+                
+                event.target.src = event.target.src.split('?')[0] + "?" + url.toString();
+            }
+        });
         """
         
         let script = WKUserScript(source: source,
