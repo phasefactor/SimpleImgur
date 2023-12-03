@@ -35,7 +35,7 @@ struct WebView: UIViewRepresentable {
             if (event.target.tagName == "IMG" &&
                 event.target.src.includes(".webp")) {
                 
-                let url = new URLSearchParams(event.target.src);
+                let url = new URLSearchParams(event.target.src.split('?')[1]);
                 url.set("fidelity", "high");
                 url.set("maxwidth", "9999");
                 
