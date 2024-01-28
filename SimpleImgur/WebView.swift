@@ -21,22 +21,17 @@ struct WebView: UIViewRepresentable {
         config.allowsInlineMediaPlayback = true
         
         
-        // inject a short bit of JS to fix the logo.  seems that they are purposefully
-        // blocking the click from actually causing the link to navigate...
-        // using timeout because the imgur ui is built dynamically on page load
-        let source = """
-        setTimeout(() => {
-            let el = document.querySelector("a.Navbar-logo");
-            el.parentNode.replaceChild(el.cloneNode(true), el);
-        }, 5000);
+        // inject a short bit of JS to try to upgrade the size and resolution of webp images being saved.
         
+        // might need to be tweaked...
+        let source = """
         // load high res version of images that might be saved/copied
         document.body.addEventListener('touchstart', (event) => {
             if (event.target.tagName == "IMG" &&
                 event.target.src.includes(".webp")) {
                 
                 let url = new URLSearchParams(event.target.src.split('?')[1]);
-                url.set("fidelity", "high");
+                url.set("fidelity", "grand");
                 url.set("maxwidth", "9999");
                 
                 event.target.src = event.target.src.split('?')[0] + "?" + url.toString();
@@ -55,7 +50,9 @@ struct WebView: UIViewRepresentable {
         // https://developer.apple.com/documentation/safariservices/creating_a_content_blocker
         
         // list of domains that imgur loads nonsense from
-        let urlList = ["doubleclick.net", "sentry-cdn.com", "smartadserver.com", "assemblyexchange.com", "amazon-adsystem.com", "ccgateway.net", "run.app", "facebook.(net)?(com)?", "scorecardresearch.com", "google-analytics.com", "sascdn.com", "media-lab.ai", "adsafeprotected.com", "ad-delivery.net", "cloudfront.net", "stretchsquirrel.com", "merequartz.com", "btloader.com", "t.imgur.com"]
+        let urlList = ["sentry-cdn.com", "ccgateway.net", "google-analytics.com", "fundingchoicesmessages.google.com", "btloader.com", "ad-delivery.net", "media-lab.ai", "sascdn.com", "scorecardresearch.com", "stretchsquirrel.com", "doubleclick.net", "exelator.com", "googlesyndication.com", "facebook.(net)?(com)?", "cloudfront.net", "t.imgur.com"]
+        
+        // , "smartadserver.com", "assemblyexchange.com", "amazon-adsystem.com", "run.app",  "adsafeprotected.com", "merequartz.com"
         
         // build our JSON block list from scratch
         var jsonString = "["
@@ -64,8 +61,10 @@ struct WebView: UIViewRepresentable {
             jsonString += "{\"trigger\":{\"url-filter\":\".*\(url.replacingOccurrences(of: ".", with: "\\\\.")).*\"},\"action\":{\"type\":\"block\"}},"
         }
         
-        // css rule to hide any empty ad spots and the Get App button
-        jsonString += "{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"css-display-none\",\"selector\":\"div.AdTop,div.BannerAd-cont,div.Ad-adhesive,a.get-app-block,a.EmeraldButton,div.AdHomeContainer,div:has(>div>div>div.AdHomeContainer)\"}}"
+        // css rule to hide any empty ads
+        jsonString += "{\"trigger\":{\"url-filter\":\".*\"},\"action\":{\"type\":\"css-display-none\",\"selector\":\"div:has(>div.fast-grid-ad)\"}}"
+        
+        
         
         jsonString += "]"
         
@@ -102,7 +101,7 @@ struct WebView: UIViewRepresentable {
     
  
     func updateUIView(_ webView: WKWebView, context: Context) {
-        let request = URLRequest(url: URL(string: "https://imgur.io")!)
+        let request = URLRequest(url: URL(string: "https://imgur.com")!)
         
         webView.load(request)
     }
@@ -119,13 +118,6 @@ struct WebView: UIViewRepresentable {
                     if host.contains("imgur.com") || host.contains("imgur.io") {
                             decisionHandler(.allow)
                             return
-                    } else {
-                        // kludge to fix a weird redirect
-                        if !(host.hasPrefix("about:") || host.contains("googlesyndication.com") ){
-                            // open external links in default browser
-                            UIApplication.shared.open(url)
-                            // then fall through to the .cancel
-                        }
                     }
                 }
             }
